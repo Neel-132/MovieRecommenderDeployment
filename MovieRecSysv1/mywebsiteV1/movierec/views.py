@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,HttpResponse
 import torch_geometric
 import torch
 import pickle
@@ -245,7 +245,7 @@ def runnewdata(newdata,model):
 def movies_user_user(embeds,new_id):
     new_user_embeds = embeds["user"][new_id,:]
     cosine_similarities = F.cosine_similarity(new_user_embeds, embeds["user"], dim=1)
-    top_similarities, top_indices = torch.topk(cosine_similarities, k=20)
+    top_similarities, top_indices = torch.topk(cosine_similarities, k=10)
     top_indices.tolist()
     similar_users = []
     for i in top_indices.tolist()[1:]: #mapped to userid
@@ -261,7 +261,7 @@ def movies_item_item(embeds,mappedmovieid):
     movie_indexes=[]
     for i in embeds["movie"][mappedmovieid,:]:
         cosine_similarities_movie = F.cosine_similarity(i, embeds["movie"], dim=1)
-        top_similarities, top_indices = torch.topk(cosine_similarities_movie, k=30)
+        top_similarities, top_indices = torch.topk(cosine_similarities_movie, k=10)
         movie_indexes.extend(top_indices.tolist())
     
     list(set(movie_indexes))
@@ -270,11 +270,24 @@ def movies_item_item(embeds,mappedmovieid):
 def movies_item_user(embeds,new_id):
     new_user_embeds = embeds["user"][new_id,:]
     cosine_similarities = F.cosine_similarity(new_user_embeds, embeds["user"], dim=1)
-    top_similarities, top_indices = torch.topk(cosine_similarities, k=100)
+    top_similarities, top_indices = torch.topk(cosine_similarities, k=10)
     
     return list(movies_df.merge(unique_movie_id,on="movieId").iloc[top_indices.tolist(),:]["title"])
 
-def RecommendMovies(request):
+def getmovieId(movie):
+    mid = list(movies_df.loc[movies_df['title'] == movie]['movieId'])[0]
+    return list(unique_movie_id.loc[unique_movie_id['movieId'] == mid]['mappedMovieId'])[0]
+
+def calculate_similarity(movie, embed):
+    mappedid = getmovieId(movie)
+    embed_movie = embed[mappedid]
+    cosine_sim = F.cosine_similarity(embed_movie, embed)
+    top_similarities, top_indices = torch.topk(cosine_sim, k = 20)
+    top_indices = top_indices.tolist()
+    top_indices.remove(mappedid)
+    return list(movies_df.merge(unique_movie_id,on="movieId").iloc[top_indices,:]["title"])
+
+def function():
     global movies_df
     global ratings_df
     global unique_user_id
@@ -298,9 +311,11 @@ def RecommendMovies(request):
     ratings_df = ratings_df.merge(unique_user_id, on='userId')
     ratings_df = ratings_df.merge(unique_movie_id, on='movieId')
 
+def RecommendMovies(request):
+    function()
+    #print(request.POST['movieRecommendation'])
 
-    
-    movies_list,ratings_list = getinfo(request.POST["movies"])
+    movies_list,ratings_list = getinfo(request.POST.get('movieRecommendation'))
 
     model = load_trainedmodel("TransformerConv.pt")
 
@@ -312,14 +327,48 @@ def RecommendMovies(request):
     
     l1 = movies_user_user(embeds,new_id)
     l2 = movies_item_item(embeds,mappedmovieid)
-    l3 = movies_item_user(embeds,new_id)
 
-    #return render(request,"RecomInput.html",{'l1': l1,'l2': l2,'l3': l3})
-    return render(request,"RecomOutput.html",{'l1': l1,'l2': l2,'l3': l3})
+    #return render(request,"Input.html",{'l1': l1,'l2': l2,'l3': l3})
+    return render(request,"RecomOutput.html",{'l1': l1,'l2': l2})
 
+def Moviesforyou(request):
+    function()
+
+    movies_list,ratings_list = getinfo(request.POST.get('moviesforyou'))
+
+    model = load_trainedmodel("TransformerConv.pt")
+
+    mappedmovieid = generate_mapped_movieid(movies_list)
+    
+    newdata,new_id = createnewgraph(mappedmovieid,ratings_list) 
+
+    embeds = runnewdata(newdata,model)
+
+    results = movies_item_user(embeds,new_id)
+    return render(request, "CuratedforUser.html", {'results' : results})
+
+def SimilarMovies(request):
+    function()
+    movie = request.POST.get('movieSimilarity')
+    movie = movie.strip()
+    model = load_trainedmodel("TransformerConv.pt")
+    embed = load_graph('movie_embed_TConv.pkl')
+    sim = calculate_similarity(movie, embed)
+    return render(request, "SimilarOutput.html", {'sim' : sim})
+  
 def home(request):
-	return render(request,"RecomInput.html")
+	return render(request,"index.html")
 
+def inp(request):
+    return render(request, "input.html")
 
+def sim(request):
+    return render(request, "similar_input.html")
+
+def curated(request):
+    return render(request, "CuratedforUserInput.html")
+
+def dataset(request):
+    return render(request, "Dataset_dashboard.html")
 
 

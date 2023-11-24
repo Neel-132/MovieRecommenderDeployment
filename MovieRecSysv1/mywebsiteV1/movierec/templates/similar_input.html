@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .recommendation-box {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .instruction-card {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        button.btn-primary {
+            background-color: #007bff;
+            border: 1px solid #007bff;
+        }
+
+        button.btn-primary:hover {
+            background-color: #0056b3;
+            border: 1px solid #0056b3;
+        }
+    </style>
+    <title>Movie Recommendation</title>
+</head>
+<body>
+
+    <div class="container recommendation-box">
+        <h2 class="mt-4 mb-4 text-center">Find Similar Movies</h2>
+
+        <!-- Multi-line text box and Recommend button -->
+        <form action="SimilarMovies" method = "post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="movieSimilarity">Enter your favorite movie</label>
+                <textarea class="form-control" id="movieSimilarity" name="movieSimilarity" rows="5" placeholder="Enter a movie name for similarity"></textarea>
+                <input type="submit" class="btn  btn-primary btn-block" value="FindSimilarity">
+            </div>  
+        </form>
+
+        <!-- Instruction card -->
+        <div class="instruction-card">
+            <h5>Instructions:</h5>
+            <p>Enter the name of the movie you like, we'll find you similar movies!</p>
+            <p>Sample input:</p>
+            <ul>
+                <li> Pulp Fiction (1994) </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js (required for Bootstrap components) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript function for the button click -->
+    <script>
+        function recommendMovie() {
+            // Add your logic here for handling the movie recommendation
+            alert('Movie recommended!'); // Example: Show an alert
+        }
+    </script>
+
+</body>
+</html>

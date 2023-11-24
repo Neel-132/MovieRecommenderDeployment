@@ -1,39 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recommend Movies</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400,700&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             background-color: #f4f4f4;
             text-align: center;
             margin: 0;
             padding: 0;
         }
         .container {
-            
             margin: 50px auto;
             padding: 20px;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
         }
         .movie-box {
-            flex-basis: 25%;
+            flex-basis: 40%;
             background-color: #fff;
             border: 1px solid #ccc;
             padding: 20px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin: 10px;
-	    border-radius: 10px;
+            border-radius: 10px;
         }
         h1 {
-            font-size: 24px;
-            margin: 10px 0;
+            font-size: 36px;
+            color: #106eea;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            margin-bottom: 20px;
         }
         h2 {
-            font-size: 20px;
-            margin: 10px 0;
+            font-size: 24px;
+            color: #106eea;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -41,21 +50,15 @@
     <h1>Recommend Movies</h1>
     <div class="container">
         <div class="movie-box">
-            <h2>Similar Users have Watched</h2>
+            <h2>Similar Users have Watched!</h2>
             {% for k in l1 %}
-                {{k}} <br/>
+                <span style = "font-size: 12px; color: #062b5b; font-weight: 600; font-family: 'Poppins', sans-serif; margin-bottom: 20px;">{{k}} </span><br/>
             {% endfor %}
         </div>
         <div class="movie-box">
-            <h2>Similar to the Movies you Watched</h2><br>
+            <h2>Similar to the Movies you Watched!</h2><br>
             {% for k in l2 %}
-                {{k}} <br/>
-            {% endfor %}
-        </div>
-        <div class="movie-box">
-            <h2>Movies for You</h2>
-            {% for k in l3 %}
-                {{k}} <br/>
+                <span style = "font-size: 12px; color: #062b5b; font-weight: 600; font-family: 'Poppins', sans-serif; margin-bottom: 20px;">{{k}} </span> <br/>
             {% endfor %}
         </div>
     </div>

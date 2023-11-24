@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SimilarMovies</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: #333; /* Improved text color for better readability */
+        }
+        .container {
+            margin: 50px auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .movie-box {
+            flex-basis: 25%;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 38px;
+            color: #106eea;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 26px;
+            color: #106eea;
+            font-weight: 600;
+            font-family: "Poppins", sans-serif;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Similar Movies</h1>
+    <div class="container">
+        <div class="movie-box">
+            <h2>Similar Movies</h2>
+            {% for k in sim %}
+                <span style = "font-size: 16px; color: #062b5b; font-weight: 600; font-family: 'Poppins', sans-serif; margin-bottom: 40px;">{{k}} </span><br/>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
